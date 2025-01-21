@@ -1,115 +1,91 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-const EmailEditor = () => {
-    const [layout, setLayout] = useState('');
-    const [formData, setFormData] = useState({
-        title: '',
-        header: '',
-        content: '',
-        footer: '',
-        imageUrl: '', // For the first image
-        imageUrll: '', // For the second image
-    });
-    const [imagePreview, setImagePreview] = useState(null); // Preview for the first image
-    const [imagePreview2, setImagePreview2] = useState(null); // Preview for the second image
-    const [downloadLink, setDownloadLink] = useState(null); // To hold the download link
+function EmailEditor() {
+    const [title, setTitle] = useState('');
+    const [header, setHeader] = useState('');
+    const [content, setContent] = useState('');
+    const [footer, setFooter] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
+    const [imageUrll, setImageUrll] = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);
+    
+    // Set your backend URL here (Render backend URL)
+    const backendURL = 'https://your-backend.onrender.com';  // Replace with your backend URL
 
-    useEffect(() => {
-        fetch('http://localhost:5000/getEmailLayout')
-            .then((res) => res.text())
-            .then(setLayout);
-    }, []);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleImageUpload = async (e, imageType) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
+    // Handle image upload
+    const handleImageUpload = async (event) => {
         const formData = new FormData();
-        formData.append('image', file);
+        formData.append('image', event.target.files[0]);
 
-        const response = await fetch('http://localhost:5000/uploadImage', {
+        const response = await fetch(`${backendURL}/uploadImage`, {
             method: 'POST',
             body: formData,
         });
 
         const data = await response.json();
-        
-        if (imageType === 'imageUrl') {
-            setFormData((prev) => ({ ...prev, imageUrl: data.imageUrl }));
-            setImagePreview(URL.createObjectURL(file));
-        } else if (imageType === 'imageUrll') {
-            setFormData((prev) => ({ ...prev, imageUrll: data.imageUrl }));
-            setImagePreview2(URL.createObjectURL(file));
-        }
+        setImageUrl(data.imageUrl);  // Set the image URL returned by the backend
     };
 
+    // Handle form submission to upload email configuration
     const handleSubmit = async () => {
-        const response = await fetch('http://localhost:5000/uploadEmailConfig', {
+        const emailConfig = {
+            title,
+            header,
+            content,
+            footer,
+            imageUrl,
+            imageUrll
+        };
+
+        const response = await fetch(`${backendURL}/uploadEmailConfig`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(emailConfig),
         });
 
         if (response.ok) {
-            // Trigger download once the response is OK
             const blob = await response.blob();
+            const downloadUrl = URL.createObjectURL(blob);
             const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'output.html'; // Specify the filename for download
+            link.href = downloadUrl;
+            link.download = 'output.html';
             link.click();
-        } else {
-            alert('Failed to save template.');
         }
     };
 
     return (
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <h1>Email Template Builder</h1>
-
-            {/* First Image Upload */}
-            <input type="file" onChange={(e) => handleImageUpload(e, 'imageUrl')} />
-            {imagePreview && <img src={imagePreview} alt="First Image Preview" style={{ maxWidth: '100%' }} />}
-
-            <input
-                type="text"
-                name="title"
-                placeholder="Title"
-                value={formData.title}
-                onChange={handleInputChange}
-            />
-
-            {/* Second Image Upload */}
-            <input type="file" onChange={(e) => handleImageUpload(e, 'imageUrll')} />
-            {imagePreview2 && <img src={imagePreview2} alt="Second Image Preview" style={{ maxWidth: '100%' }} />}
-
-            <input
-                type="text"
-                name="header"
-                placeholder="Header"
-                value={formData.header}
-                onChange={handleInputChange}
-            />
-            <textarea
-                name="content"
-                placeholder="Content"
-                value={formData.content}
-                onChange={handleInputChange}
-            />
-            <input
-                type="text"
-                name="footer"
-                placeholder="Footer"
-                value={formData.footer}
-                onChange={handleInputChange}
-            />
-            <button onClick={handleSubmit}>Save and Download Template</button>
+        <div>
+            <h1>Email Builder</h1>
+            <div>
+                <label>Title:</label>
+                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+            </div>
+            <div>
+                <label>Header:</label>
+                <input type="text" value={header} onChange={(e) => setHeader(e.target.value)} />
+            </div>
+            <div>
+                <label>Content:</label>
+                <textarea value={content} onChange={(e) => setContent(e.target.value)} />
+            </div>
+            <div>
+                <label>Footer:</label>
+                <input type="text" value={footer} onChange={(e) => setFooter(e.target.value)} />
+            </div>
+            <div>
+                <label>Upload Image:</label>
+                <input type="file" onChange={handleImageUpload} />
+            </div>
+            {imageUrl && <div><img src={imageUrl} alt="Uploaded Preview" width="200" /></div>}
+            <div>
+                <label>Image URL:</label>
+                <input type="text" value={imageUrll} onChange={(e) => setImageUrll(e.target.value)} />
+            </div>
+            <button onClick={handleSubmit}>Generate Email</button>
         </div>
     );
-};
+}
 
 export default EmailEditor;
