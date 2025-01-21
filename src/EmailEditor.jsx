@@ -57,33 +57,93 @@ function EmailEditor() {
 
     return (
         <div>
-            <h1>Email Builder</h1>
-            <div>
-                <label>Title:</label>
-                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-            </div>
-            <div>
-                <label>Header:</label>
-                <input type="text" value={header} onChange={(e) => setHeader(e.target.value)} />
-            </div>
-            <div>
-                <label>Content:</label>
-                <textarea value={content} onChange={(e) => setContent(e.target.value)} />
-            </div>
-            <div>
-                <label>Footer:</label>
-                <input type="text" value={footer} onChange={(e) => setFooter(e.target.value)} />
-            </div>
-            <div>
-                <label>Upload Logo image:</label>
-                <input type="file" onChange={handleImageUpload} />
-            </div>
-            {imageUrl && <div><img src={imageUrl} alt="Uploaded Preview" width="200" /></div>}
-            <div>
-                <label>URL:</label>
-                <input type="text" value={imageUrll} onChange={(e) => setImageUrll(e.target.value)} />
-            </div>
-            <button onClick={handleSubmit}>Generate Email Template</button>
+<h1 style={{ textAlign: 'center', color: '#333', fontSize: '2em', marginBottom: '20px' }}>Email Builder</h1>
+
+<div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', backgroundColor: '#f9f9f9' }}>
+    <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Title:</label>
+        <input 
+            type="text" 
+            value={title} 
+            onChange={(e) => setTitle(e.target.value)} 
+            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '16px' }} 
+        />
+    </div>
+    
+    <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Header:</label>
+        <input 
+            type="text" 
+            value={header} 
+            onChange={(e) => setHeader(e.target.value)} 
+            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '16px' }} 
+        />
+    </div>
+    
+    <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Content:</label>
+        <textarea 
+            value={content} 
+            onChange={(e) => setContent(e.target.value)} 
+            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '16px', height: '150px' }} 
+        />
+    </div>
+    
+    <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Footer:</label>
+        <input 
+            type="text" 
+            value={footer} 
+            onChange={(e) => setFooter(e.target.value)} 
+            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '16px' }} 
+        />
+    </div>
+    
+    <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Upload Logo image:</label>
+        <input 
+            type="file" 
+            onChange={handleImageUpload} 
+            style={{ padding: '10px', borderRadius: '5px', fontSize: '16px' }} 
+        />
+    </div>
+    
+    {imageUrl && (
+        <div style={{ marginBottom: '15px', textAlign: 'center' }}>
+            <img src={imageUrl} alt="Uploaded Preview" width="200" style={{ borderRadius: '8px', border: '1px solid #ddd' }} />
+        </div>
+    )}
+    
+    <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>URL:</label>
+        <input 
+            type="text" 
+            value={imageUrll} 
+            onChange={(e) => setImageUrll(e.target.value)} 
+            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '16px' }} 
+        />
+    </div>
+
+    <button 
+        onClick={handleSubmit} 
+        style={{
+            width: '100%', 
+            padding: '15px', 
+            backgroundColor: '#007BFF', 
+            color: '#fff', 
+            border: 'none', 
+            borderRadius: '5px', 
+            fontSize: '16px', 
+            cursor: 'pointer',
+            transition: 'background-color 0.3s ease'
+        }}
+        onMouseEnter={(e) => e.target.style.backgroundColor = '#0056b3'}
+        onMouseLeave={(e) => e.target.style.backgroundColor = '#007BFF'}
+    >
+        Generate Email Template
+    </button>
+</div>
+
         </div>
     );
 }
