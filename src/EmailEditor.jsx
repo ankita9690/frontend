@@ -75,15 +75,15 @@ function EmailEditor() {
                 <input type="text" value={footer} onChange={(e) => setFooter(e.target.value)} />
             </div>
             <div>
-                <label>Upload Image:</label>
+                <label>Upload Logo image:</label>
                 <input type="file" onChange={handleImageUpload} />
             </div>
             {imageUrl && <div><img src={imageUrl} alt="Uploaded Preview" width="200" /></div>}
             <div>
-                <label>Image URL:</label>
+                <label>URL:</label>
                 <input type="text" value={imageUrll} onChange={(e) => setImageUrll(e.target.value)} />
             </div>
-            <button onClick={handleSubmit}>Generate Email</button>
+            <button onClick={handleSubmit}>Generate Email Template</button>
         </div>
     );
 }
