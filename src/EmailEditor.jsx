@@ -10,7 +10,7 @@ function EmailEditor() {
     const [selectedImage, setSelectedImage] = useState(null);
     
     // Set your backend URL here (Render backend URL)
-    const backendURL = 'https://your-backend.onrender.com';  // Replace with your backend URL
+    const backendURL = 'https://backend-7gc8.onrender.com';  // Replace with your backend URL
 
     // Handle image upload
     const handleImageUpload = async (event) => {
